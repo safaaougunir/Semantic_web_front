@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<meta charset="utf-8" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <html prefix=" geo:http://www.w3.org/2003/01/geo/wgs84_pos# rdfs:http://www.w3.org/2000/01/rdf-schema# rdf:http://www.w3.org/2000/01/rdf-schema# ex:http://example.com/stations/ ">
 <head>
     <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -20,9 +22,9 @@
         <a class="navbar-brand" href="#">
             <img src="assets/sncf.png" width="50" height="30" class="d-inline-block align-top" alt="">
         </a>
-        <a class="nav-link text-light active" href="#">Stops</a>
+        <a class="nav-link text-light active" href="index.html">Stops</a>
         <a class="nav-link text-light" href="#">Routes</a>
-        <a class="nav-link text-light" href="#">Link</a>
+        <a class="nav-link text-light" href="d3_map.html">Vehicles</a>
     </nav>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">...</div>
@@ -37,38 +39,14 @@
 
 <br/>
 <br/>
+
+<h4 class="center text-muted mx-auto" style="width: 700px;" > Here you can find all our stations with their current weather :</h4>
 <br/>
-<form style="display:none">
-    <input id="endpoint" value="http://localhost:3030/Test/sparql" type="text">
-    <textarea id="sparql">
-    PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-    PREFIX ex: <http://example.com/stations/>
-    PREFIX wo: <http://opensensingcity.emse.fr/ontologies/weather#>
-
-
-    SELECT  ?station ?lab ?lat ?long ?weather
-    WHERE {
-    ?station rdf:type geo:SpatialThing.
-    ?station  rdfs:label ?lab.
-    ?station geo:lat ?lat.
-    ?station geo:long ?long.
-        ?station wo:WeatherState ?weather.
-
-    }
-        LIMIT 10
-
-   </textarea>
-</form>
 <div id="result"></div>
+
 <div class="container" id="app">
     <table class="table table-striped" id="myTable">
-        <thead>
-         <tr>
 
-        </tr>
-        </thead>
         <tbody>
         <tr>
             <th scope="col" >Name</th>
@@ -80,7 +58,27 @@
         </thead>
 
         <tbody>
-        <tr v-for="stop in stops" about="stop.station">
+        <tr v-for="stop in stops" about="stop.station" data-toggle="modal" data-target="#exampleModal">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Hello </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Its actually raining Dont forget to take your umbrella !!
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <td scope="row" property="rdfs:label">{{ stop.lab.value }}</td>
             <td scope="row" property="geo:lat">{{ stop.lat.value }}</td>
             <td scope="row" property="geo:long" datatype="xsd:decimal">{{ stop.long.value }}</td>
@@ -88,10 +86,12 @@
 
         </tr>
         </tbody>
+
     </table>
 
 </div>
 <script>
+
 
 </script>
 <script src="https://unpkg.com/vue"></script>
@@ -99,6 +99,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 <script src="script.js"></script>
+
 
 </body>
 

@@ -16,8 +16,18 @@ var app = new Vue({
 function exec() {
     /* Uncomment to see debug information in console */
     d3sparql.debug = true
-    var endpoint = d3.select("#endpoint").property("value")
-    var sparql = d3.select("#sparql").property("value")
+    var endpoint = "http://localhost:3030/MyData/sparql"
+    var sparql =  "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
+        " PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
+        " PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>" +
+        " PREFIX ex: <http://example.com/stations/>" +
+        " PREFIX wo: <http://opensensingcity.emse.fr/ontologies/weather#>" +
+        " SELECT  ?station ?lab ?lat ?long ?weather" +
+    " WHERE { ?station rdf:type geo:SpatialThing. " +
+    "   ?station  rdfs:label ?lab. " +
+    "?station geo:lat ?lat. " +
+    "?station geo:long ?long. " +
+        "?station wo:WeatherState ?weather.}"
     d3sparql.query(endpoint, sparql, render)
 }
 function render(json) {

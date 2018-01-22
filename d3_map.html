@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="d3sparql.js"></script>
+
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/d3.geo.projection.v0.min.js"></script>
+    <script src="//d3js.org/topojson.v1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <style>
+        svg {
+            display: block;
+            margin: auto;
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+<body onload="exec()">
+
+<nav class="navbar navbar-dark bg-dark">
+    <nav class="nav">
+        <a class="navbar-brand" href="#">
+            <img src="assets/sncf.png" width="50" height="30" class="d-inline-block align-top" alt="">
+        </a>
+        <a class="nav-link text-light" href="index.html">Stops</a>
+        <a class="nav-link text-light " href="#">Routes</a>
+        <a class="nav-link text-light active" href="d3_map.html">Vehicles</a>
+    </nav>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">...</div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+    </div>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="myInput" onkeyup="myFunction()" title="Type in a name stop">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Search</button>
+    </form>
+</nav>
+<br />
+    <h2>Here are the different Current Locations of Vehicles : </h2>
+<br />
+<br />
+<div id="result"></div>
+<script>
+    function exec() {
+        var endpoint = "http://localhost:3030/MyDataVehicule/sparql"
+        var sparql = "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> SELECT ?vehicule ?lat ?long WHERE { ?vehicule geo:lat ?lat; geo:long ?long. } LIMIT 1000 "
+        d3sparql.query(endpoint, sparql, render)
+    }
+    function render(json) {
+        var config = {
+            "var_lat": "lat",
+            "var_lng": "long",
+            "class":"center",
+            "width": 960,
+            "height": 480,
+            "radius": 5,
+            "color": "#55C25E",
+            "topojson":"world-50m.json",
+            "selector": "#result"
+        }
+        console.log(json)
+        d3sparql.coordmap(json, config)
+    }
+    function exec_offline() {
+        d3.json("cache/ebi/biosamples.json", render)
+
+    }
+    function toggle() {
+        d3sparql.toggle()
+    }
+</script>
+<script src="https://unpkg.com/vue"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+</html>
