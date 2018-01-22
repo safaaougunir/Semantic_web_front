@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html prefix=" geo:http://www.w3.org/2003/01/geo/wgs84_pos# rdfs:http://www.w3.org/2000/01/rdf-schema# rdf:http://www.w3.org/2000/01/rdf-schema# ex:http://example.com/stations/ ">
+<head>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="d3sparql.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+    <style>
+        <!-- customize CSS -->
+    </style>
+</head>
+<body onload="exec()">
+
+<nav class="navbar navbar-dark bg-dark">
+    <nav class="nav">
+        <a class="navbar-brand" href="#">
+            <img src="assets/sncf.png" width="50" height="30" class="d-inline-block align-top" alt="">
+        </a>
+        <a class="nav-link text-light active" href="#">Stops</a>
+        <a class="nav-link text-light" href="#">Routes</a>
+        <a class="nav-link text-light" href="#">Link</a>
+    </nav>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">...</div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+    </div>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="myInput" onkeyup="myFunction()" title="Type in a name stop">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Search</button>
+    </form>
+</nav>
+
+<br/>
+<br/>
+<br/>
+<form style="display:none">
+    <input id="endpoint" value="http://localhost:3030/SNCF_Data/sparql" type="text">
+    <textarea id="sparql">
+    PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    PREFIX ex: <http://example.com/stations/>
+    PREFIX wo: <http://opensensingcity.emse.fr/ontologies/weather#>
+
+
+    SELECT  ?station ?lab ?lat ?long ?weather
+    WHERE {
+    ?station rdf:type geo:SpatialThing.
+    ?station  rdfs:label ?lab.
+    ?station geo:lat ?lat.
+    ?station geo:long ?long.
+        ?station wo:WeatherState ?weather.
+
+    }
+        LIMIT 10
+
+   </textarea>
+</form>
+<div id="result"></div>
+<div class="container" id="app">
+    <table class="table table-striped" id="myTable">
+        <thead>
+         <tr>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="col" >Name</th>
+            <th scope="col" >Lat</th>
+            <th scope="col" >long</th>
+            <th scope="col" >weather</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr v-for="stop in stops" about="stop.station">
+            <td scope="row" property="rdfs:label">{{ stop.lab.value }}</td>
+            <td scope="row" property="geo:lat">{{ stop.lat.value }}</td>
+            <td scope="row" property="geo:long" datatype="xsd:decimal">{{ stop.long.value }}</td>
+            <td scope="row">{{ stop.weather.value }}</td>
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script>
+
+</script>
+<script src="https://unpkg.com/vue"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</body>
+
+</html>
