@@ -48,11 +48,12 @@
 <div id="result"></div>
 <script>
     function exec() {
-        var endpoint = "http://localhost:3030/MyDataVehicule/sparql"
+        var endpoint = "http://localhost:3030/my/sparql"
         var sparql = "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> SELECT ?vehicule ?lat ?long WHERE { ?vehicule geo:lat ?lat; geo:long ?long. } LIMIT 1000 "
         d3sparql.query(endpoint, sparql, render)
     }
     function render(json) {
+        /*
         var config = {
             "var_lat": "lat",
             "var_lng": "long",
@@ -63,9 +64,13 @@
             "color": "#55C25E",
             "topojson":"world-50m.json",
             "selector": "#result"
+        }*/
+        var config = {
+            "selector": "#result"
         }
         console.log(json)
-        d3sparql.coordmap(json, config)
+        //d3sparql.coordmap(json, config)
+        d3sparql.htmltable(json, config)
     }
     function exec_offline() {
         d3.json("cache/ebi/biosamples.json", render)
@@ -79,5 +84,6 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="topojson.js"></script>
 </body>
 </html>
