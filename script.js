@@ -1,3 +1,13 @@
+var mydata = $.rdf.databank().prefix('geo', 'http://www.w3.org/2003/01/geo/wgs84_pos#')
+    .prefix('rdfs','http://www.w3.org/2000/01/rdf-schema#')
+    .prefix('ex',"http://example.com/stations/")
+    .about('dbpedia:The_Beatles')
+
+
+
+
+
+
 var app = new Vue({
     el: '#app',
     data: {
@@ -37,6 +47,12 @@ function render(json) {
     }
 //d3sparql.htmltable(json, config)
     app.setStops(json.results.bindings)
+    for (stop in json.results.bindings)
+    {
+        mydata.triple('ex:'+stop.station.value,'rdfs:lab',stop.lab.value)
+                .triple(stop.lat.value,'geo:lat'.stop.lat.value)
+            .triple(stop.station.value,'geo:lat'.stop.long.value)
+    }
 }
 
 //search bar
